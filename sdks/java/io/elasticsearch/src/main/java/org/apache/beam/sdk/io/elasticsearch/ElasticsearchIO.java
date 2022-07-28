@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.google.auto.service.AutoService;
 import com.google.auto.value.AutoValue;
 import java.io.File;
 import java.io.FileInputStream;
@@ -1796,6 +1797,11 @@ public class ElasticsearchIO {
     // N.B. Be sure to create tuple tags as new anonymous subclasses to avoid type erasure issues
     public static final TupleTag<Document> SUCCESSFUL_WRITES = new TupleTag<Document>() {};
     public static final TupleTag<Document> FAILED_WRITES = new TupleTag<Document>() {};
+
+    @AutoService(ExternalTransformRegistrar.class)
+    public static class External implements ExternalTransformRegistrar {
+      public static final String URN = "beam:external:java:elasticsearch:write:v1";
+    }
 
     private DocToBulk docToBulk = new AutoValue_ElasticsearchIO_DocToBulk.Builder().build();
 
