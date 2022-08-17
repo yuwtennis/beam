@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import com.google.auto.service.AutoService;
 import com.google.auto.value.AutoValue;
 import java.io.File;
 import java.io.FileInputStream;
@@ -62,10 +63,12 @@ import org.apache.beam.sdk.coders.DefaultCoder;
 import org.apache.beam.sdk.coders.InstantCoder;
 import org.apache.beam.sdk.coders.NullableCoder;
 import org.apache.beam.sdk.coders.StringUtf8Coder;
+import org.apache.beam.sdk.expansion.ExternalTransformRegistrar;
 import org.apache.beam.sdk.io.BoundedSource;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.ValueProvider;
 import org.apache.beam.sdk.transforms.DoFn;
+import org.apache.beam.sdk.transforms.ExternalTransformBuilder;
 import org.apache.beam.sdk.transforms.GroupIntoBatches;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.transforms.ParDo;
@@ -88,6 +91,7 @@ import org.apache.beam.sdk.values.TupleTag;
 import org.apache.beam.sdk.values.TupleTagList;
 import org.apache.beam.vendor.guava.v26_0_jre.com.google.common.annotations.VisibleForTesting;
 import org.apache.beam.vendor.guava.v26_0_jre.com.google.common.base.Strings;
+import org.apache.beam.vendor.guava.v26_0_jre.com.google.common.collect.ImmutableMap;
 import org.apache.beam.vendor.guava.v26_0_jre.com.google.common.collect.Streams;
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.Header;
@@ -1966,6 +1970,53 @@ public class ElasticsearchIO {
     @Override
     public PCollectionTuple expand(PCollection<String> input) {
       return input.apply(docToBulk).apply(bulkIO);
+    }
+
+    public static class ElasticsearchIOBuilder
+        implements ExternalTransformBuilder<
+            External.Configuration, PCollection<String>, PCollectionTuple> {
+      @Override
+      public PTransform<PCollection<String>, PCollectionTuple> buildExternal(
+          Write.External.Configuration configuration) {
+
+        ConnectionConfiguration newCon =
+            ConnectionConfiguration.create(
+                configuration.nodeAddrs, configuration.index, configuration.mappingType);
+
+        Write wr = new Write();
+        return wr.withConnectionConfiguration(newCon);
+      }
+    }
+
+    @AutoService(ExternalTransformRegistrar.class)
+    public static class External implements ExternalTransformRegistrar {
+
+      public static final String URN = "beam:transform:org.apache.beam:elasticsearch_write:v1";
+
+      @Override
+      public Map<String, ExternalTransformBuilder<?, ?, ?>> knownBuilderInstances() {
+        return ImmutableMap.of(URN, new ElasticsearchIOBuilder());
+      }
+
+      /** Parameters class to expose the Write transform to an external SDK. */
+      public static class Configuration {
+
+        private String[] nodeAddrs;
+        private String index;
+        private String mappingType;
+
+        public void setNodeAddrs(String[] nodeAddrs) {
+          this.nodeAddrs = nodeAddrs;
+        }
+
+        public void setIndex(String index) {
+          this.index = index;
+        }
+
+        public void setMappingType(String mappingType) {
+          this.mappingType = mappingType;
+        }
+      }
     }
   }
 
