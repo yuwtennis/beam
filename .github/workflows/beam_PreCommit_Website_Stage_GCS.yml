@@ -66,7 +66,7 @@ jobs:
     name: beam_PreCommit_Website_Stage_GCS (Run Website_Stage_GCS PreCommit)
     steps:
       - name: Git checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Rerun on comment

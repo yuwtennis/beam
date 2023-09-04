@@ -41,7 +41,7 @@ jobs:
     runs-on: [self-hosted, ubuntu-20.04, main]
     name: beam_PostCommit_Go_Dataflow_ARM
     steps:       
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Rerun on comment
