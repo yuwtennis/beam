@@ -21,6 +21,7 @@
 module github.com/apache/beam/sdks/v2
 
 go 1.21.0
+toolchain go1.22.5
 
 require (
 	cloud.google.com/go/bigquery v1.65.0
@@ -30,12 +31,12 @@ require (
 	cloud.google.com/go/pubsub v1.45.3
 	cloud.google.com/go/spanner v1.73.0
 	cloud.google.com/go/storage v1.48.0
-	github.com/aws/aws-sdk-go-v2 v1.32.7
+	github.com/aws/aws-sdk-go-v2 v1.36.2
 	github.com/aws/aws-sdk-go-v2/config v1.28.7
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.48
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.43
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.72.0
-	github.com/aws/smithy-go v1.22.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.77.1
+	github.com/aws/smithy-go v1.22.2
 	github.com/docker/go-connections v0.5.0
 	github.com/dustin/go-humanize v1.0.1
 	github.com/go-sql-driver/mysql v1.8.1
@@ -131,16 +132,16 @@ require (
 	github.com/apache/arrow/go/arrow v0.0.0-20200730104253-651201b0f516 // indirect
 	github.com/apache/thrift v0.17.0 // indirect
 	github.com/aws/aws-sdk-go v1.34.0 // indirect
-	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.7 // indirect
+	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.10 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.22 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.26 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.26 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.33 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.33 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.1 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.26 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.4.7 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.7 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.7 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.33 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.6.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.14 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.14 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.24.8 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sts v1.33.3 // indirect
