@@ -1,0 +1,37 @@
+# Issue
+# https://github.com/apache/beam/issues/34242
+name: Docker environment tests
+
+on:
+  push:
+    branches: ['docker-bug'] #!
+  pull_request:
+    branches: ['master']
+    paths: ['dev-support/**', 'buildSrc/**', '**/build.gradle', 'sdks/python/setup.py', 'sdks/python/tox.ini', 'start-build-env.sh']
+  workflow_dispatch:
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.event.issue.number || github.event.pull_request.head.label || github.sha || github.head_ref || github.ref }}-${{ github.event.schedule || github.event.comment.id || github.event.sender.login}}'
+  cancel-in-progress: true
+
+env:
+  DEVELOCITY_ACCESS_KEY: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
+  GRADLE_ENTERPRISE_CACHE_USERNAME: ${{ secrets.GE_CACHE_USERNAME }}
+  GRADLE_ENTERPRISE_CACHE_PASSWORD: ${{ secrets.GE_CACHE_PASSWORD }}
+
+jobs:
+  run_docker_env_install:
+    timeout-minutes: 25
+    name: "Run docker environment build shell script"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup environment
+        uses: ./.github/actions/setup-environment-action
+        with:
+          go-version: default
+          python-version: default
+      - name: "Build Docker dev image and Gradlew check"
+        run: "./start-build-env.sh ./gradlew checkSetup"
+        id: docker_env_build
