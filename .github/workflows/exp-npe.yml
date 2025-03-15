@@ -1,0 +1,27 @@
+on:
+  push:
+
+jobs:
+  build:
+    runs-on: ["ubuntu-latest"]
+    name: ${{ matrix.job_name }} (${{ matrix.job_phrase }})
+    strategy:
+      matrix:
+        job_name: ["build"]
+        job_phrase: ["Build env"]
+    if: |
+      github.event_name == 'push' ||
+      github.event_name == 'pull_request_target' ||
+      (github.event_name == 'schedule' && github.repository == 'apache/beam') ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event.comment.body == 'Run Job Phrase'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup repository
+        uses: ./.github/actions/setup-action
+        with:
+          comment_phrase: ${{ matrix.job_phrase }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_job: ${{ matrix.job_name }} (${{ matrix.job_phrase }})
+      - name: Setup env
+        run: ./start-build-env.sh ./gradlew checkSetup
