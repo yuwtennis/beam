@@ -24,7 +24,7 @@ jobs:
   run_docker_env_install:
     timeout-minutes: 25
     name: "Run docker environment build shell script"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
       - name: Setup environment
