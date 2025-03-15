@@ -85,7 +85,9 @@ docker build -t "beam-build-${USER_ID}" - <<UserSpecificDocker
 FROM beam-build
 RUN rm -f /var/log/faillog /var/log/lastlog
 RUN groupadd --non-unique -g ${GROUP_ID} ${USER_NAME}
-RUN groupmod -g ${DOCKER_GROUP_ID} docker
+# Duplicate gid
+# https://github.com/yuwtennis/beam/actions/runs/13874181173/job/38824421649#step:4:4297
+# RUN groupmod -g ${DOCKER_GROUP_ID} docker
 RUN useradd -g ${GROUP_ID} -G docker -u ${USER_ID} -k /root -m ${USER_NAME} -d "${DOCKER_HOME_DIR}"
 RUN echo "${USER_NAME} ALL=NOPASSWD: ALL" > "/etc/sudoers.d/beam-build-${USER_ID}"
 ENV HOME "${DOCKER_HOME_DIR}"
