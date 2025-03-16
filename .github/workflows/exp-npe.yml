@@ -6,6 +6,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.job_name }} (${{ matrix.job_phrase }})
     strategy:
+      fail-fast: false
       matrix:
         job_name: ["build"]
         job_phrase: ["Build env"]
