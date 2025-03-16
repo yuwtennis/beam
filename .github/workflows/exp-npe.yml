@@ -3,12 +3,13 @@ on:
 
 jobs:
   build:
-    runs-on: ["ubuntu-latest"]
+    runs-on: ${{ matrix.os }}
     name: ${{ matrix.job_name }} (${{ matrix.job_phrase }})
     strategy:
       matrix:
         job_name: ["build"]
         job_phrase: ["Build env"]
+        os: [ubuntu-24.04, ubuntu-22.04, ubuntu-20.04]
     if: |
       github.event_name == 'push' ||
       github.event_name == 'pull_request_target' ||
